@@ -18,7 +18,7 @@ func NewServer() *Server {
 }
 
 func (server *Server) handleWebServer(socket *websocket.Conn) {
-	fmt.Println("new incoming connection from client: ", socket.RemoteAddr())
+	fmt.Println("New incoming connection from client: ", socket.RemoteAddr())
 
 	server.conns[socket] = true
 	server.readLoop(socket)
@@ -38,12 +38,12 @@ func (server *Server) readLoop(socket *websocket.Conn) {
 			continue
 		}
 
-		message := string(buffer[:n])
+		message := string(buffer)
 		fmt.Println("Client:", message)
 
 		socket.Write([]byte("Acknowledged message\n"))
 
-		server.broadcast([]byte(message))
+		server.broadcast([]byte(message[:n]))
 	}
 }
 
@@ -58,9 +58,9 @@ func (server *Server) broadcast(b []byte) {
 }
 
 func (server *Server) handleOrders(socket *websocket.Conn) {
-	fmt.Println("new incoming connection from client: ", socket.RemoteAddr())
+	fmt.Println("New incoming connection from client: ", socket.RemoteAddr())
 	for {
-		message := fmt.Sprint("subscribed and ordered:", time.Now().UnixNano())
+		message := fmt.Sprint("Subscribed and ordered:", time.Now().UnixNano())
 		socket.Write([]byte(message))
 		time.Sleep(time.Second * 2)
 	}

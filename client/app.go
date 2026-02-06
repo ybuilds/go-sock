@@ -1,5 +1,5 @@
 package main
 
 func main() {
-	tcpClient()
+	clientSocket("ws://localhost:3000/socket", "http://localhost:3000")
 }
